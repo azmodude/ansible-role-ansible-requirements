@@ -1,0 +1,31 @@
+---
+- name: Get Distribution from /etc/os-release
+  slurp:
+    src: /etc/os-release
+  register: osrelease
+- set_fact:
+    osrelease: "{{ osrelease['content'] | b64decode | replace('\n', ';')}}"
+
+- name: Set Distribution Name
+  set_fact:
+    distribution: "{{ osrelease | regex_replace('.*;ID=\"*([A-Za-z ]+)\"*;.*$', '\\1') }}"
+
+- name: Set Full Version String
+  set_fact:
+    full_version: "{{ osrelease | regex_replace('.*VERSION_ID=\"*([0-9.]+)\"*;.*$', '\\1') }}"
+- name: Set Major Version String
+  set_fact:
+    major_version: "{{ full_version | regex_replace('([0-9]+).*', '\\1') }}"
+
+- debug:
+    msg:
+      var: "Installing requirements for {{ distribution }}, Major Version: {{ major_version }}, Full Version: {{ full_version }}"
+    verbosity: 1
+
+- name: Install requirements
+  include: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ distribution | lower }}/requirements_{{ distribution | lower}}_{{ major_version }}.yml"
+      skip: true
+  

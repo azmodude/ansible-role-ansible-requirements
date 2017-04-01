@@ -1,0 +1,19 @@
+---
+- name: Install Python 2.7
+  raw: apt-get install -y python2.7
+  become: True
+  register: apt
+  changed_when: "'0 upgraded, 0 newly installed' not in apt.stdout"
+
+- name: Set Ansible Python Interpreter
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python2.7
+
+- name: Install requirements for Ansible Modules
+  apt:
+    name: "{{ package }}"
+  become: True
+  with_items:
+    - sudo
+  loop_control:
+    loop_var: package

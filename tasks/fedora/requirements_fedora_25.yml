@@ -1,0 +1,21 @@
+---
+- name: Install python2 and python2-dnf
+  raw: dnf -y install python2 python2-dnf
+  become: True
+  register: dnf
+  changed_when: "'Nothing to do.' not in dnf.stdout"
+
+- name: Set Ansible Python Interpreter
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python2.7
+
+- name: Install requirements for Ansible Modules
+  dnf:
+    name: "{{ package }}"
+  become: True
+  with_items:
+    - python-firewall
+    - libselinux-python
+    - policycoreutils-python
+  loop_control:
+    loop_var: package
