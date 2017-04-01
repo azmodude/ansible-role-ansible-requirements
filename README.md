@@ -1,4 +1,4 @@
-Ansible-Requirements
+Bootstrap-Requirements
 =========
 
 Install requirements depending on distribution for Ansible to function correctly. 
@@ -13,7 +13,7 @@ Make sure `gather_facts` is set to `False` for the play because Python might not
       become: yes
       gather_facts: False
       roles:
-        - azmodude.ansible-requirements
+        - azmodude.bootstrap-requirements
 
 License
 -------
