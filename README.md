@@ -18,7 +18,7 @@ Make sure `gather_facts` is set to `False` for the play because Python might not
 License
 -------
 
-BSD.
+BSD 3-clause.
 
 Author Information
 ------------------
